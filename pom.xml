@@ -4,9 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>c4bj</groupId>
-    <artifactId>C4BJ</artifactId>
+    <groupId>jfixsuite</groupId>
+    <artifactId>JFixSuite</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>C4BDumper</module>
+        <module>C4BJ</module>
+        <module>C4BDumper</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -33,7 +39,6 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -43,13 +48,37 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <argLine>
-                        -Xmx2048m
+                        -Xmx8192m
+                        -XX:MaxPermSize=1024m
                     </argLine>
                     <reuseForks>true</reuseForks>
-                    <forkCount>1.0C</forkCount> <!-- Adjust based on your system ( don't, because it causes issues) -->
+                    <forkCount>4</forkCount> <!-- Adjust based on your system -->
                     <parallel>classesAndMethods</parallel>
                     <threadCount>8</threadCount> <!-- Adjust this based on your CPU cores -->
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>com.gzoltar.internal.core.listeners.JUnitListener</value>
+                        </property>
+                    </properties>
                 </configuration>
+            </plugin>
+
+
+            <!-- GZoltar -->
+            <plugin>
+                <groupId>com.gzoltar</groupId>
+                <artifactId>com.gzoltar.maven</artifactId>
+                <version>1.7.2</version>
+                <executions>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>fl-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -113,6 +142,12 @@
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <version>1.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.spoonlabs</groupId>
+            <artifactId>flacoco</artifactId>
+            <version>1.0.6</version>
         </dependency>
     </dependencies>
 
