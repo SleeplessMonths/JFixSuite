@@ -52,9 +52,13 @@
                         -XX:MaxPermSize=1024m
                     </argLine>
                     <reuseForks>true</reuseForks>
-                    <forkCount>4</forkCount> <!-- Adjust based on your system -->
+                    <forkCount>8</forkCount> <!-- Adjust based on your system -->
                     <parallel>classesAndMethods</parallel>
                     <threadCount>8</threadCount> <!-- Adjust this based on your CPU cores -->
+                     <testFailureIgnore>true</testFailureIgnore>
+                    <systemPropertyVariables>
+                    <gzoltar-agent.destfile>${project.build.directory}/gzoltar.ser</gzoltar-agent.destfile>
+                    </systemPropertyVariables>
                     <properties>
                         <property>
                             <name>listener</name>
@@ -68,17 +72,42 @@
             <!-- GZoltar -->
             <plugin>
                 <groupId>com.gzoltar</groupId>
-                <artifactId>com.gzoltar.maven</artifactId>
-                <version>1.7.2</version>
-                <executions>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>fl-report</goal>
-                        </goals>
-                    </execution>
-                </executions>
+        <artifactId>com.gzoltar.maven</artifactId>
+        <version>1.7.4-SNAPSHOT</version>
+            <configuration>
+              <granularity>line</granularity>
+              <inclPublicMethods>true</inclPublicMethods>
+              <inclStaticConstructors>true</inclStaticConstructors>
+              <inclDeprecatedMethods>true</inclDeprecatedMethods>
+              <flFamilies>
+                <flFamily>
+                  <name>sfL</name>
+                  <formulas>
+                    <formula>barinel</formula>
+                    <formula>dstar</formula>
+                    <formula>ochiai</formula>
+                    <formula>tarantula</formula>
+                    <!--<formula>...</formula>-->
+                  </formulas>
+                  <metrics>
+                    <metric>rho</metric>
+                    <metric>ambiguity</metric>
+                    <metric>entropy</metric>
+                    <!--<metric>...</metric>-->
+                  </metrics>
+                  <formatters>
+                    <format implementation="com.gzoltar.report.fl.config.ConfigTxtReportFormatter" />
+                    <format implementation="com.gzoltar.report.fl.config.ConfigHTMLReportFormatter">
+                      <htmlViews>
+                        <htmlView>sunburst</htmlView>
+                        <htmlView>vertical_partition</htmlView>
+                        <!--<htmlView>...</htmlView>-->
+                      </htmlViews>
+                    </format>
+                  </formatters>
+                </flFamily>
+              </flFamilies>
+            </configuration>
             </plugin>
         </plugins>
     </build>
@@ -149,6 +178,22 @@
             <artifactId>flacoco</artifactId>
             <version>1.0.6</version>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>com.gzoltar</groupId>
+            <artifactId>com.gzoltar.agent</artifactId>
+            <classifier>runtime</classifier>
+            <version>1.7.4-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gzoltar</groupId>
+            <artifactId>com.gzoltar.cli</artifactId>
+            <version>1.7.4-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>
+                ${project.basedir}/../com.gzoltar.cli/target/com.gzoltar.cli-1.7.4-SNAPSHOT-jar-with-dependencies.jar
+            </systemPath>
+        </dependency>
+    </dependencies>
 </project>
