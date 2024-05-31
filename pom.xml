@@ -4,14 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>jfixsuite</groupId>
-    <artifactId>JFixSuite</artifactId>
+    <groupId>org.jfixsuite</groupId>
+    <artifactId>jfixsuite</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>C4BDumper</module>
         <module>C4BJ</module>
-        <module>C4BDumper</module>
     </modules>
 
     <properties>
@@ -48,17 +47,13 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <argLine>
-                        -Xmx8192m
-                        -XX:MaxPermSize=1024m
+                        @{argLine} -Xmx8192m
                     </argLine>
                     <reuseForks>true</reuseForks>
                     <forkCount>8</forkCount> <!-- Adjust based on your system -->
                     <parallel>classesAndMethods</parallel>
                     <threadCount>8</threadCount> <!-- Adjust this based on your CPU cores -->
-                     <testFailureIgnore>true</testFailureIgnore>
-                    <systemPropertyVariables>
-                    <gzoltar-agent.destfile>${project.build.directory}/gzoltar.ser</gzoltar-agent.destfile>
-                    </systemPropertyVariables>
+                    <testFailureIgnore>true</testFailureIgnore>
                     <properties>
                         <property>
                             <name>listener</name>
@@ -68,46 +63,25 @@
                 </configuration>
             </plugin>
 
-
-            <!-- GZoltar -->
             <plugin>
                 <groupId>com.gzoltar</groupId>
-        <artifactId>com.gzoltar.maven</artifactId>
-        <version>1.7.4-SNAPSHOT</version>
-            <configuration>
-              <granularity>line</granularity>
-              <inclPublicMethods>true</inclPublicMethods>
-              <inclStaticConstructors>true</inclStaticConstructors>
-              <inclDeprecatedMethods>true</inclDeprecatedMethods>
-              <flFamilies>
-                <flFamily>
-                  <name>sfL</name>
-                  <formulas>
-                    <formula>barinel</formula>
-                    <formula>dstar</formula>
-                    <formula>ochiai</formula>
-                    <formula>tarantula</formula>
-                    <!--<formula>...</formula>-->
-                  </formulas>
-                  <metrics>
-                    <metric>rho</metric>
-                    <metric>ambiguity</metric>
-                    <metric>entropy</metric>
-                    <!--<metric>...</metric>-->
-                  </metrics>
-                  <formatters>
-                    <format implementation="com.gzoltar.report.fl.config.ConfigTxtReportFormatter" />
-                    <format implementation="com.gzoltar.report.fl.config.ConfigHTMLReportFormatter">
-                      <htmlViews>
-                        <htmlView>sunburst</htmlView>
-                        <htmlView>vertical_partition</htmlView>
-                        <!--<htmlView>...</htmlView>-->
-                      </htmlViews>
-                    </format>
-                  </formatters>
-                </flFamily>
-              </flFamilies>
-            </configuration>
+                <artifactId>com.gzoltar.maven</artifactId>
+                <version>1.7.2</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>fl-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -134,21 +108,6 @@
             -->
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.10.2</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>com.github.stefanbirkner</groupId>
             <artifactId>system-lambda</artifactId>
@@ -173,27 +132,20 @@
             <version>1.3.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
-            <groupId>com.github.spoonlabs</groupId>
-            <artifactId>flacoco</artifactId>
-            <version>1.0.6</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.gzoltar</groupId>
             <artifactId>com.gzoltar.agent</artifactId>
             <classifier>runtime</classifier>
-            <version>1.7.4-SNAPSHOT</version>
+            <version>1.7.3</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.gzoltar</groupId>
-            <artifactId>com.gzoltar.cli</artifactId>
-            <version>1.7.4-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>
-                ${project.basedir}/../com.gzoltar.cli/target/com.gzoltar.cli-1.7.4-SNAPSHOT-jar-with-dependencies.jar
-            </systemPath>
         </dependency>
     </dependencies>
 </project>
