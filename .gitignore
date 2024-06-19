@@ -1,5 +1,8 @@
 out/
 target/
+C4BDumper/
+C4BJ/no_failures
+C4BJ/throws_errors
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
