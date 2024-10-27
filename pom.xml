@@ -55,27 +55,29 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
+
+                    <argLine>
+                        -Xmx16384m
+                    </argLine>
+
                     <!--
-                    <argLine>
-                        @{argLine} -Xmx2048m
-                    </argLine>
-                    -->
-                    <argLine>
-                        -Xmx2048m
-                    </argLine>
-                    <reuseForks>true</reuseForks>
-                    <forkCount>8</forkCount> <!-- Adjust based on your system -->
-                    <parallel>classesAndMethods</parallel>
-                    <threadCount>8</threadCount> <!-- Adjust this based on your CPU cores -->
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <systemPropertyVariables>
+                        <gzoltar-agent.destfile>${project.build.directory}/gzoltar.ser</gzoltar-agent.destfile>
+                    </systemPropertyVariables>
                     <properties>
-                        <!--
                         <property>
                             <name>listener</name>
                             <value>com.gzoltar.internal.core.listeners.JUnitListener</value>
                         </property>
-                        -->
                     </properties>
+                    -->
+
+                    <reuseForks>true</reuseForks>
+                    <forkCount>8</forkCount> <!-- Adjust based on your system -->
+                    <forkedProcessExitTimeoutInSeconds>120</forkedProcessExitTimeoutInSeconds>
+                    <parallel>classesAndMethods</parallel>
+                    <threadCount>8</threadCount> <!-- Adjust this based on your CPU cores -->
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
 
@@ -83,7 +85,38 @@
             <plugin>
                 <groupId>com.gzoltar</groupId>
                 <artifactId>com.gzoltar.maven</artifactId>
-                <version>1.7.2</version>
+                <version>1.7.3</version>
+                <configuration>
+                    <granularity>line</granularity>
+                    <inclPublicMethods>true</inclPublicMethods>
+                    <inclStaticConstructors>true</inclStaticConstructors>
+                    <inclDeprecatedMethods>true</inclDeprecatedMethods>
+                    <flFamilies>
+                        <flFamily>
+                            <name>sfL</name>
+                            <formulas>
+                                <formula>barinel</formula>
+                                <formula>dstar</formula>
+                                <formula>ochiai</formula>
+                                <formula>tarantula</formula>
+                            </formulas>
+                            <metrics>
+                                <metric>rho</metric>
+                                <metric>ambiguity</metric>
+                                <metric>entropy</metric>
+                            </metrics>
+                            <formatters>
+                                <format implementation="com.gzoltar.report.fl.config.ConfigTxtReportFormatter" />
+                                <format implementation="com.gzoltar.report.fl.config.ConfigHTMLReportFormatter">
+                                    <htmlViews>
+                                        <htmlView>sunburst</htmlView>
+                                        <htmlView>vertical_partition</htmlView>
+                                    </htmlViews>
+                                </format>
+                            </formatters>
+                        </flFamily>
+                    </flFamilies>
+                </configuration>
                 <executions>
                     <execution>
                         <id>pre-unit-test</id>
@@ -101,6 +134,7 @@
                 </executions>
             </plugin>
             -->
+
         </plugins>
     </build>
 
@@ -158,11 +192,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>com.github.spoonlabs</groupId>
             <artifactId>flacoco</artifactId>
             <version>1.0.6</version>
         </dependency>
+        -->
 
         <!--
         <dependency>
@@ -172,6 +208,13 @@
             <version>1.7.3</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.gzoltar</groupId>
+            <artifactId>com.gzoltar.cli</artifactId>
+            <version>1.7.3</version>
+        </dependency>
         -->
+
     </dependencies>
 </project>

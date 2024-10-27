@@ -1,5 +1,7 @@
 # JFixSuite
-JFixSuite is a test suite derived from [Code4Bench](https://github.com/code4bench/Code4Bench) for the purpose of analyzing program repair techniques. This contains 6990 programs in Java versions 6, 7 and 8 with single line bugs and give the wrong answer on test.
+JFixSuite is a test suite derived from [Code4Bench](https://github.com/code4bench/Code4Bench) for the purpose of analyzing program repair techniques. This contains 2666 buggy programs in Java versions 6, 7 and 8 with single line bugs and give the wrong answer on test. It also contains tests, and "correct" versions for each buggy program.
+
+Scripts were used to filter out cases that weren't fit to be used. The IDs of cases that were filtered out are stored in `problematic_subId.txt` and `C4BJ/filtered_subIds/list.txt`
 
 ## Requirements
 
@@ -17,22 +19,21 @@ git clone https://github.com/Autonymic/JFixSuite.git
 cd JFixSuite
 ```
 
+## Usage
+In the root folder there are python scripts that were used to clean up test files after running mvn test.
+
 ### Unzipping Required Files
-The provided JFixSuite.zip contains the test suite files in the src folder, as well as a filtered_packages folder containing files that, for various reasons, were deemed as unfit for the test suite.
+To unzip the files in `C4BJ/src.zip`, follow these steps:
 
-To unzip the files, follow these steps:
+Ensure that `src.zip` is in the `C4BJ directory` of the cloned repository.
 
-Ensure JFixSuite_files.zip is in the root directory of the cloned repository.
 Unzip the file using the following command:
 
 ```bash
-unzip JFixSuite_files.zip
+unzip C4BJ/src.zip
 ```
 
 This command will extract the contents of the zip file.
-
-## Usage
-In the root folder there are 3 python scripts that are used to clean up test files after running mvn test.
 
 ## License
 JFixSuite is dervied from the [Code4Bench](https://github.com/code4bench/Code4Bench) project which is distributed under the terms of the Creative Commons Attribution 4.0 International license.

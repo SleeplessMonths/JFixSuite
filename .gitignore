@@ -1,8 +1,9 @@
 out/
 target/
-C4BDumper/
-C4BJ/no_failures
-C4BJ/throws_errors
+C4BJ/target/
+C4BJ/accepted_programs/
+C4BJ/buggy_programs/
+C4BJ/filtered_subIds/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -12,6 +13,8 @@ C4BJ/throws_errors
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/
+C4BJ/target/.idea/
 *.iws
 *.iml
 *.ipr
